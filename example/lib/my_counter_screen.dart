@@ -11,48 +11,56 @@ class MyCounterScreen extends StatefulWidget {
 }
 
 class _MyCounterScreenState extends State<MyCounterScreen> {
-  final MyCounter myCounter = MyCounter();
+  final MyCounter _myCounter = MyCounter();
 
   void _onTapIncrementButton() {
-    myCounter.incrementCount();
+    _myCounter.incrementCount();
   }
 
   void _onTapResetButton() {
-    myCounter.resetCount();
+    _myCounter.resetCount();
+  }
+
+  @override
+  void dispose() {
+    _myCounter.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: _onTapIncrementButton,
-              child: const Text('Increment'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _onTapResetButton,
-              child: const Text('Reset'),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            ListenableBuilder(
-              listenable: myCounter,
-              builder: (context, child) => Text(
-                '${myCounter.count}',
-                style: Theme.of(context).textTheme.headlineMedium,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: _onTapIncrementButton,
+                child: const Text('Increment'),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _onTapResetButton,
+                child: const Text('Reset'),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              ListenableBuilder(
+                listenable: _myCounter,
+                builder: (context, child) => Text(
+                  '${_myCounter.count}',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
