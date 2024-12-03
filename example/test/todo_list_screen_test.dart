@@ -28,11 +28,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Select 2 random indices to check
+    // Select 5 random indices to check
     final random = Random();
     final indicesToCheck = <int>{};
-    while (indicesToCheck.length < 2) {
-      indicesToCheck.add(random.nextInt(10));
+    while (indicesToCheck.length < 5) {
+      indicesToCheck.add(random.nextInt(5));
     }
 
     // Check the checkboxes for the selected indices

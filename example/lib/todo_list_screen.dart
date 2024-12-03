@@ -48,102 +48,97 @@ class _TodoListScreenState extends State<TodoListScreen> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
         ),
-        body: ListenableBuilder(
-          listenable: _todoListModel, // Listen to changes in _todoListModel
-          builder: (context, child) {
-            return Stack(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListenableBuilder(
-                          listenable:
-                              _todoListModel, // Listen to changes in _todoListModel
-                          builder: (context, child) {
-                            return ListView.builder(
-                              itemCount: _todoListModel.todos.length,
-                              itemBuilder: (context, index) {
-                                final todo = _todoListModel.todos[index];
-                                return ListTile(
-                                  title: Text(
-                                    todo.title,
-                                    style: TextStyle(
-                                      decoration: todo.completed
-                                          ? TextDecoration.lineThrough
-                                          : null,
-                                    ),
-                                  ),
-                                  leading: Checkbox(
-                                    key: Key('checkbox_$index'),
-                                    value: todo.completed,
-                                    onChanged: (value) {
-                                      _todoListModel.toggleTodo(index);
+        body: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Expanded(
+                child: ListenableBuilder(
+                  listenable:
+                      _todoListModel, // Listen to changes in _todoListModel
+                  builder: (context, child) {
+                    return Stack(
+                      children: [
+                        ListView.builder(
+                          itemCount: _todoListModel.todos.length,
+                          itemBuilder: (context, index) {
+                            final todo = _todoListModel.todos[index];
+                            return ListTile(
+                              title: Text(
+                                todo.title,
+                                style: TextStyle(
+                                  decoration: todo.completed
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                ),
+                              ),
+                              leading: Checkbox(
+                                key: Key('checkbox_$index'),
+                                value: todo.completed,
+                                onChanged: (value) {
+                                  _todoListModel.toggleTodo(index);
+                                },
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      _showEditDialog(context, index, todo);
                                     },
                                   ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        onPressed: () {
-                                          _showEditDialog(context, index, todo);
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete),
-                                        onPressed: () {
-                                          _todoListModel.removeTodo(index);
-                                        },
-                                      ),
-                                    ],
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      _todoListModel.removeTodo(index);
+                                    },
                                   ),
-                                  subtitle: todo.data != null
-                                      ? Text("ID: ${todo.data}")
-                                      : null,
-                                );
-                              },
+                                ],
+                              ),
+                              subtitle: todo.data != null
+                                  ? Text("ID: ${todo.data}")
+                                  : null,
                             );
                           },
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: _textController,
-                          onFieldSubmitted: (value) {
-                            if (_formKey.currentState!.validate()) {
-                              _todoListModel.addTodo(value.trim(),
-                                  data: aRandomInteger);
-                            }
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a todo';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            hintText: 'Add a new todo...',
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                _textController.clear();
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                        _todoListModel.loadingStatus == LoadingStatus.inProgress
+                            ? overlayView
+                            : const SizedBox(),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _textController,
+                  onFieldSubmitted: (value) {
+                    if (_formKey.currentState!.validate()) {
+                      _todoListModel.addTodo(value.trim(),
+                          data: aRandomInteger);
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a todo';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Add a new todo...',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _textController.clear();
+                      },
+                    ),
                   ),
                 ),
-                _todoListModel.loadingStatus == LoadingStatus.inProgress
-                    ? overlayView
-                    : const SizedBox(),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
         ),
       ),
     );
