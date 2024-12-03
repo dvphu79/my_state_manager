@@ -4,19 +4,34 @@ import 'package:my_state_manager/loading_status.dart';
 import 'package:my_state_manager/my_state_manager.dart';
 import 'package:my_state_manager/todo.dart';
 
+// ignore: must_be_immutable
 class TodoListScreen extends StatefulWidget {
-  const TodoListScreen({super.key, required this.title});
+  TodoListScreen({super.key, required this.title});
+
+  // Constructor specifically for tests
+  @visibleForTesting
+  TodoListScreen.forTest({super.key, required this.title, this.model});
 
   final String title;
+
+  MyTodoListModel<int>? model;
 
   @override
   State<TodoListScreen> createState() => _TodoListScreenState();
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
-  final _todoListModel = MyTodoListModel<int>();
+  var _todoListModel = MyTodoListModel<int>();
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.model != null) {
+      _todoListModel = widget.model!;
+    }
+  }
 
   @override
   void dispose() {
@@ -61,6 +76,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                                     ),
                                   ),
                                   leading: Checkbox(
+                                    key: Key('checkbox_$index'),
                                     value: todo.completed,
                                     onChanged: (value) {
                                       _todoListModel.toggleTodo(index);

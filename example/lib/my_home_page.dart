@@ -32,11 +32,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              const MyCounterScreen(title: 'My Counter Screen'),
+                              TodoListScreen(title: 'Todo List'),
                         ),
                       );
                     },
-                    child: const Text('My Counter Screen'),
+                    child: const Text('Todo List'),
                   ),
                 );
               case 1:
@@ -47,11 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              const TodoListScreen(title: 'Todo List'),
+                              const MyCounterScreen(title: 'My Counter Screen'),
                         ),
                       );
                     },
-                    child: const Text('Todo List'),
+                    child: const Text('My Counter Screen'),
                   ),
                 );
               default:
